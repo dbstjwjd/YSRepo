@@ -19,6 +19,10 @@
     font-style: normal;
 }
 
+html {
+    background: black;
+}
+
 body, ul, li {
     margin: 0;
     list-style: none;
@@ -42,4 +46,44 @@ a {
     content: "▶";
     margin-right: 0.5rem;
     font-size: 10pt;
+}
+
+#signup, #login {
+    color: white;
+}
+
+#signup:hover {
+    color: deeppink;
+}
+
+#login:hover {
+    color: #00804b;
+}
+
+.box {
+    background:black;
+    margin: 0;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#loginText {
+    -webkit-text-stroke: 1px lightgray;
+    text-stroke: 1px lightgray;
+    font-size: 30pt; color: white; font-weight: bold; text-shadow: 3px 3px #888888, 5px 5px #555555, 5px 5px #222222;
+}
+
+.blinking {
+    animation: blink-caret 1s step-end infinite;
+}
+
+@keyframes blink-caret {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
 }

@@ -1,5 +1,5 @@
 <html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
-<div layout:fragment="content" style="background:black; margin: 0; height: 90vh; display: flex; justify-content: center; align-items: center;">
+<div layout:fragment="content" class="box">
     <div class="d-flex justify-content-center">
         <div style="font-family: pixel, serif; width: 280px; background: rgba(128, 128, 128, 0.5); color: white; text-align: center; border-radius: 1px;">
             <div class="p-2" style="font-size: 20pt; background: rgb(50, 50, 50)">MENU</div>
@@ -15,7 +15,7 @@
                     <div style="font-size: 14pt; text-align: center; color: white;">[자료실]로 입장할까요?</div>
                     <div style="font-size: 14pt;" class="d-flex justify-content-center mt-2 text-light">
                         <div class="me-5 option" id="libEnter">YES</div>
-                        <div class="option">NO</div>
+                        <div class="option noEnter">NO</div>
                     </div>
                 </div>
             </div>
@@ -29,14 +29,16 @@
                     <div style="font-size: 14pt; text-align: center; color: white;">[메모장]으로 입장할까요?</div>
                     <div style="font-size: 14pt;" class="d-flex justify-content-center mt-2 text-light">
                         <div class="me-5 option" id="memoEnter">YES</div>
-                        <div class="option">NO</div>
+                        <div class="option noEnter">NO</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript" layout:fragment="script">
-
+<script layout:fragment="script">
+    $('.noEnter').click(function () {
+       $('.modal').modal('hide');
+    });
 </script>
 </html>
