@@ -1,16 +1,18 @@
 <nav th:fragment="navbarFragment" class="p-4 mt-0 w-full top-0" style=" background:#000; border-bottom: 1px double #fff;">
-    <div class="container mx-auto flex items-center">
+    <div class="container-fluid flex items-center">
         <div class="flex w-full">
             <a style="font-family: pixel, sans-serif; font-size: 2rem; font-weight: bold; line-height: 1;"
-               class="text-base no-underline text-white hover:text-gray-300" href="/">
+               class="text-base no-underline text-white hover:text-gray-300" href="/main">
                 YS Repository
             </a>
         </div>
         <div class="flex justify-end w-full items-center">
             <a style="font-family: pixel, serif; font-size: 14pt;"
-               class="inline-block no-underline mr-5" id="login" href="/member/login">Log-in</a>
+               class="inline-block no-underline mr-5 link" href="/">Home</a>
             <a style="font-family: pixel, serif; font-size: 14pt;"
-               class="inline-block no-underline" id="signup" href="/member/signup">Sign-up</a>
+               class="inline-block no-underline mr-5 link" href="/member/login">Log-in</a>
+            <a style="font-family: pixel, serif; font-size: 14pt;"
+               class="inline-block no-underline link" href="/member/signup">Sign-up</a>
         </div>
     </div>
 </nav>

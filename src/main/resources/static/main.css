@@ -30,12 +30,6 @@ body, ul, li {
     background: black;
 }
 
-a {
-    color: inherit;
-    text-decoration: none;
-}
-
-
 .option:hover {
     background: rgba(190, 190, 190, 0.5);;
     color: black;
@@ -46,18 +40,6 @@ a {
     content: "▶";
     margin-right: 0.5rem;
     font-size: 10pt;
-}
-
-#signup, #login {
-    color: white;
-}
-
-#signup:hover {
-    color: deeppink;
-}
-
-#login:hover {
-    color: #00804b;
 }
 
 .box {
@@ -86,4 +68,36 @@ a {
     50% {
         opacity: 0;
     }
+}
+
+.yellowBtn {
+    background-color: goldenrod;
+    border: 2px solid #fff;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.2s;
+}
+
+.yellowBtn:hover {
+    background-color: darkgoldenrod;
+}
+
+.yellowBtn:active {
+    background-color: darkgoldenrod;
+    transform: translateY(2px);
+}
+
+input, textarea {
+    border:0;
+    border-bottom: 1px solid white;
+    font-size: 15pt;
+    font-family: Pre;
+    background: rgba(50, 50, 50, 0.5); color: white;"
 }

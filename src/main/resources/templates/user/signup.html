@@ -1,0 +1,82 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="box" style="font-family: pixel, serif;">
+    <div class="d-flex justify-content-center">
+        <div style="background: rgba(100, 100, 100, 0.5); padding: 50px; border-radius: 10px;">
+            <div class="p-2 text-center mb-3" id="loginText">
+                S I G N U P
+            </div>
+            <form th:action="@{/member/signup}" method="post" th:object="${signupForm}">
+                <div id="section1">
+                    <label for="username" class="text-light mb-3">아이디를 입력하세요.<span class="blinking">|</span></label>
+                    <input type="text" id="username" class="form-control" th:field="*{username}">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="text-light mt-3 nextBtn"><span style="font-size: 9pt;">▶</span>
+                            Enter
+                        </button>
+                    </div>
+                </div>
+                <div id="section2" style="display: none;">
+                    <label for="password1" class="text-light mb-3">비밀번호를 입력하세요.<span class="blinking">|</span></label>
+                    <input type="text" id="password1" class="form-control" th:field="*{password1}">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="text-light mt-3 nextBtn"><span style="font-size: 9pt;">▶</span>
+                            Enter
+                        </button>
+                    </div>
+                </div>
+                <div id="section3" style="display: none;">
+                    <label for="password2" class="text-light mb-3">비밀번호를 다시 입력하세요.<span
+                            class="blinking">|</span></label>
+                    <input type="text" id="password2" class="form-control" th:field="*{password2}">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="text-light mt-3 nextBtn"><span style="font-size: 9pt;">▶</span>
+                            Enter
+                        </button>
+                    </div>
+                </div>
+                <div id="section4" style="display: none;">
+                    <label for="nickname" class="text-light mb-3">닉네임을 입력하세요.<span class="blinking">|</span></label>
+                    <input type="text" id="nickname" class="form-control" th:field="*{nickname}">
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="text-light mt-3 signup"><span style="font-size: 9pt;">▶</span>
+                            Enter
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <input type="hidden" th:value="${errorMessage}" id="errorMessage">
+</div>
+<script layout:fragment="script">
+    $(function () {
+        var toast = new bootstrap.Toast($('#alertToast'));
+
+        var errorMessage = $("#errorMessage").val();
+        if (errorMessage) {
+            toast.show();
+        }
+
+        $('input').keypress(function (e) {
+            if (e.which == 13) {
+                goToNextSection($(this));
+                return false;
+            }
+        });
+
+        $('.nextButton').click(function() {
+            goToNextSection($(this));
+        });
+
+        function goToNextSection(element) {
+            var currentSection = element.closest('div[id^="section"]');
+            var nextSection = currentSection.next('div[id^="section"]');
+
+            if (nextSection.length) {
+                currentSection.hide();
+                nextSection.show();
+            }
+        }
+    });
+</script>
+</html>

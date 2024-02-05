@@ -1,0 +1,151 @@
+<html layout:decorate="~{layout}">
+<head>
+    <style>
+        #fileList {
+            margin-top: 10px;
+        }
+
+        .file-item {
+            background: #000;
+            padding: 5px 15px 5px 15px;
+            margin-bottom: 5px;
+            position: relative;
+            border-radius: 10px;
+            font-size: 14pt;
+        }
+
+        .remove-file {
+            color: red;
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<div layout:fragment="content" class="container" style="font-family: pixel, serif">
+    <h2 class="mt-5" style="color: white;">File Upload<span class="blinking">|</span></h2>
+    <div style="background: rgba(100, 100, 100, 0.5); border-radius: 10px;" class="p-5 mt-5">
+        <form method="post" id="writeForm" enctype="multipart/form-data">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <div class="mb-5">
+                <label for="title" class="form-label" style="color: green; font-size: 18pt;">title</label>
+                <input class="form-control" type="text" id="title" name="title">
+            </div>
+            <div class="mb-5">
+                <label for="content" class="form-label" style="color: deeppink; font-size: 18pt;">content</label>
+                <textarea rows="1" id="content" name="content"
+                          class="form-control"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="file" class="form-label" style="color: dodgerblue; font-size: 18pt;">file</label>
+                <input class="form-control" type="file" id="file" multiple name="files">
+                <div id="fileList" style="color: white;"></div>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="button" class="yellowBtn" id="saveBtn">save</button>
+            </div>
+        </form>
+    </div>
+    <!-- 이미지 미리보기 -->
+    <div class="modal" tabindex="-1" style="display: none;" id="imageModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <img id="previewImage" src="" alt="File preview" style="max-width:100%;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 텍스트 미리보기 -->
+    <div class="modal" tabindex="-1" style="display: none;" id="textModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body p-2">
+                    <div id="previewText" style="font-family: Pre; font-size: 14pt;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script layout:fragment="script">
+    $(function () {
+        var selectedFiles = {};
+        var toast = new bootstrap.Toast($('#alertToast'));
+
+
+        $('#saveBtn').click(function () {
+            if ($('#title').val() === "") {
+                $('#message').text("제목을 입력해주세요.");
+                toast.show();
+            } else if ($('#content').val() === "") {
+                $('#message').text("내용을 입력해주세요.");
+                toast.show();
+            } else
+                $('#writeForm').submit();
+        })
+
+        function updateFileInput() {
+            var dataTransfer = new DataTransfer();
+            $.each(selectedFiles, function (key, file) {
+                dataTransfer.items.add(file);
+            });
+            $('#file').prop('files', dataTransfer.files);
+        }
+
+        function renderFileList() {
+            var fileList = $('#fileList');
+            fileList.empty();
+
+            $.each(selectedFiles, function (key, file) {
+                var fileItem = $('<div>').addClass('file-item').text(file.name);
+                var removeButton = $('<button>').text('-').addClass('remove-file');
+
+                removeButton.on('click', function () {
+                    delete selectedFiles[key];
+                    updateFileInput();
+                    renderFileList();
+                });
+
+                fileItem.append(removeButton);
+                fileList.append(fileItem);
+
+                fileItem.on('click', function () {
+                    if (file.type.match('image.*')) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            $('#previewImage').attr('src', e.target.result);
+                            $('#imageModal').modal('show');
+                        };
+                        reader.readAsDataURL(file);
+                    } else if (file.type.match('text.*') || file.name.match('\.csv$')) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            var textPreview = $('<div>').text(e.target.result).css({
+                                width: '100%',
+                                height: '200px',
+                                'white-space': 'pre-wrap',
+                                'overflow-wrap': 'break-word',
+                                'overflow-y': 'scroll'
+                            });
+                            $('#previewText').empty().append(textPreview);
+                            $('#textModal').modal('show');
+                        };
+                        reader.readAsText(file);
+                    } else {
+                        $('#message').text("미리보기가 불가능한 파일입니다.");
+                        toast.show();
+                    }
+                });
+            });
+        }
+
+        $('#file').on('change', function (event) {
+            $.each(event.target.files, function (i, file) {
+                selectedFiles[file.name] = file;
+            });
+            updateFileInput();
+            renderFileList();
+        });
+    });
+</script>
+</html>
