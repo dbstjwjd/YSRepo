@@ -1,5 +1,6 @@
 package com.YS.YSrepo.memo;
 
+import com.YS.YSrepo.member.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,5 +22,8 @@ public class Memo {
     private String content;
 
     private LocalDateTime createDate;
+
+    @ManyToOne
+    private Member member;
 
 }

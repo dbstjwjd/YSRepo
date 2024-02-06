@@ -1,13 +1,9 @@
 package com.YS.YSrepo.member;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,22 +18,30 @@ public class MemberController {
     }
 
     @GetMapping("/signup")
-    public String signup(SignupForm signupForm) {
+    public String signup() {
         return "user/signup";
     }
 
     @PostMapping("/signup")
-    public String signup(@Valid SignupForm signupForm, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("errorMessage", bindingResult.getAllErrors().get(0).getDefaultMessage());
-            return "user/signup";
-        } else if (!signupForm.getPassword1().equals(signupForm.getPassword2())) {
-            model.addAttribute("errorMessage",
-                    "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-            return "user/signup";
-        }
-        memberService.createMember(signupForm.getUsername(), signupForm.getPassword1(), signupForm.getNickname());
-        return "redirect:/member/login";
+    @ResponseBody
+    public String signup(@RequestBody String userdata) {
+        JSONObject jsonObject = new JSONObject(userdata);
+        String username = jsonObject.getString("username");
+        String password = jsonObject.getString("password");
+        String nickname = jsonObject.getString("nickname");
+        memberService.createMember(username, password, nickname);
+        return "'" + nickname + "'님 가입을 환영합니다!";
     }
 
+    @PostMapping("/check/username")
+    @ResponseBody
+    public boolean checkUsername(String username) {
+        return memberService.checkUsernameExists(username);
+    }
+
+    @PostMapping("/check/nickname")
+    @ResponseBody
+    public boolean checkNickname(String nickname) {
+        return memberService.checkNicknameExists(nickname);
+    }
 }

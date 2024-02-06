@@ -1,46 +1,105 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="box" style="font-family: pixel, serif;">
     <div class="d-flex justify-content-center">
-        <div>
+        <div class="grayBox">
             <div class="p-2 text-center mb-3" id="loginText">
                 L O G I N
             </div>
-            <div id="section1">
-                <label for="username" class="text-light mb-3">아이디를 입력하세요.<span class="blinking">|</span></label>
-                <br>
-                <input type="text" id="username"
-                       style="background: black; padding-left: 5px; border-bottom: 1px solid white; color: white;">
-                <div class="d-flex justify-content-end">
-                    <button type="button" class="text-light mt-3" id="idButton"><span style="font-size: 9pt;">▶</span> Enter</button>
+            <form th:action="@{/member/login}" method="post" id="loginForm">
+                <div id="section1">
+                    <label for="username" class="text-light mb-3">아이디를 입력하세요.<span class="blinking">|</span></label>
+                    <br>
+                    <input type="text" id="username" name="username" class="form-control">
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="button" class="link nextBtn"><span
+                                style="font-size: 9pt; margin-left: 3px;">▶</span> Next
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div id="section2" style="display: none;">
-                <label for="password" class="text-light mb-3">비밀번호를 입력하세요.<span class="blinking">|</span></label>
-                <br>
-                <input type="text" id="password"
-                       style="background: black; padding-left: 5px; border-bottom: 1px solid white; color: white;">
-                <div class="d-flex justify-content-end">
-                    <button type="button" class="text-light mt-3"><span style="font-size: 9pt;">▶</span> Enter</button>
+                <div id="section2" style="display: none;">
+                    <label for="password" class="text-light mb-3">비밀번호를 입력하세요.<span class="blinking">|</span></label>
+                    <br>
+                    <input type="password" id="password" name="password" class="form-control">
+                    <div class="d-flex justify-content-between mt-3">
+                        <button type="button" class="link preBtn"><span
+                                style="margin-right:3px; font-size: 9pt;">◀</span>Pre
+                        </button>
+                        <button type="button" class="link login"><span style="font-size: 9pt;">▶</span> Enter</button>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
+    <input type="hidden" th:value="${param.error} ? error " id="loginError">
 </div>
 <script layout:fragment="script">
     $(function () {
-        function move() {
-            $("#section1").hide();
-            $("#section2").show();
+        if ($('#loginError').val() === "error") {
+            $('#message').text("아이디 또는 비밀번호를 확인해주세요.");
+            toast.show();
+        }
+        // 다음 섹션 이동
+        function goToNextSection(element) {
+            var currentSection = element.closest('div[id^="section"]');
+            var nextSection = currentSection.next('div[id^="section"]');
+
+            if (nextSection.length) {
+                currentSection.hide();
+                nextSection.show();
+            }
         }
 
-        $("#idButton").click(function() {
-            move();
+        // 이전 섹션 이동
+        function goToPreviousSection(element) {
+            var previousSection = element.prev();
+            if (previousSection.length) {
+                element.hide();
+                previousSection.show();
+            }
+        }
+
+        $('.preBtn').click(function () {
+            var currentSection = $(this).closest('div[id^="section"]');
+            goToPreviousSection(currentSection);
         });
 
-        $("#username").keydown(function(event) {
-            if (event.key === 'Enter') {
-                move();
-                event.preventDefault();
+        // 아이디 null 값 확인
+        $(document).on('keypress click', '#username, .nextBtn', function (e) {
+            if (e.target.id === 'username' && e.which === 13) {
+                if ($('#username').val() === "") {
+                    $('#message').text("아이디 입력란을 확인해주세요!");
+                    toast.show();
+                } else {
+                    e.preventDefault();
+                    goToNextSection($(this));
+                    return false;
+                }
+            } else if (e.target.className.includes('nextBtn') && e.type === 'click') {
+                if ($('#username').val() === "") {
+                    $('#message').text("아이디 입력란을 확인해주세요!");
+                    toast.show();
+                } else {
+                    goToNextSection($(this));
+                }
+            }
+        });
+
+        // 비밀번호 null 값 확인
+        $(document).on('keypress click', '#password, .login', function (e) {
+            if (e.target.id === 'password' && e.which === 13) {
+                if ($('#password').val() === "") {
+                    $('#message').text("비밀번호 입력란을 확인해주세요!");
+                    toast.show();
+                } else {
+                    $('#loginForm').submit();
+                }
+            } else if (e.target.className.includes('login') && e.type === 'click') {
+                if ($('#password').val() === "") {
+                    $('#message').text("비밀번호 입력란을 확인해주세요!");
+                    toast.show();
+                } else {
+                    $('#loginForm').submit();
+                }
             }
         });
     });

@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,5 +24,19 @@ public class MemberService {
         member.setJoinDate(LocalDateTime.now());
         memberRepository.save(member);
         return member;
+    }
+
+    public boolean checkUsernameExists(String username) {
+        return memberRepository.findByUsername(username).isPresent();
+    }
+
+    public boolean checkNicknameExists(String nickname) {
+        return memberRepository.findByNickname(nickname).isPresent();
+    }
+
+    public Member getByUsername(String username) {
+        Optional<Member> member = memberRepository.findByUsername(username);
+        if (member.isPresent()) return member.get();
+        else throw new RuntimeException("가입된 회원이 아닙니다.");
     }
 }

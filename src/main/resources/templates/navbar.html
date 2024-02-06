@@ -10,7 +10,9 @@
             <a style="font-family: pixel, serif; font-size: 14pt;"
                class="inline-block no-underline mr-5 link" href="/">Home</a>
             <a style="font-family: pixel, serif; font-size: 14pt;"
-               class="inline-block no-underline mr-5 link" href="/member/login">Log-in</a>
+               class="inline-block no-underline mr-5 link" href="/member/login" sec:authorize="isAnonymous()">Log-in</a>
+            <a style="font-family: pixel, serif; font-size: 14pt;"
+               class="inline-block no-underline mr-5 link" href="/member/logout" sec:authorize="isAuthenticated()">Log-out</a>
             <a style="font-family: pixel, serif; font-size: 14pt;"
                class="inline-block no-underline link" href="/member/signup">Sign-up</a>
         </div>

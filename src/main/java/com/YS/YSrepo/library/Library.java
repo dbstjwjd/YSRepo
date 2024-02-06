@@ -1,9 +1,7 @@
 package com.YS.YSrepo.library;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.YS.YSrepo.member.Member;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,4 +26,7 @@ public class Library {
     private LocalDateTime createDate;
 
     private LocalDateTime modifyDate;
+
+    @ManyToOne
+    private Member member;
 }
