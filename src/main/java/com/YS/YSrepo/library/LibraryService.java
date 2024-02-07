@@ -2,6 +2,7 @@ package com.YS.YSrepo.library;
 
 import com.YS.YSrepo.member.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,20 +41,23 @@ public class LibraryService {
         }
         if (library.getFilePath() == null) library.setFilePath(new ArrayList<>());
         for (MultipartFile newFile : files) {
-            for (int i = 0; i < library.getFilePath().size(); i++) {
-                String fileName = newFile.getOriginalFilename();
-                if (!library.getFilePath().get(i).equals(fileName)) {
-                    File dest = new File(uploadDirectory.getPath() + File.separator + fileName);
-                    FileCopyUtils.copy(newFile.getBytes(), dest);
-                    library.getFilePath().add(fileName);
-                }
+            String fileName = newFile.getOriginalFilename();
+            if (library.getFilePath().isEmpty()) {
+                File dest = new File(uploadDirectory.getPath() + File.separator + fileName);
+                FileCopyUtils.copy(newFile.getBytes(), dest);
+                library.getFilePath().add(fileName);
+            }
+            if (!library.getFilePath().contains(fileName)) {
+                File dest = new File(uploadDirectory.getPath() + File.separator + fileName);
+                FileCopyUtils.copy(newFile.getBytes(), dest);
+                library.getFilePath().add(fileName);
             }
         }
         libraryRepository.save(library);
     }
 
     public List<Library> getList() {
-        return libraryRepository.findAll();
+        return libraryRepository.findAll(Sort.by(Sort.Direction.DESC, "createDate"));
     }
 
     public Library getData(Integer id) {
@@ -69,6 +73,7 @@ public class LibraryService {
     public void modifyData(Library library, String title, String content) {
         library.setTitle(title);
         library.setContent(content);
+        library.setModifyDate(LocalDateTime.now());
         libraryRepository.save(library);
     }
 }

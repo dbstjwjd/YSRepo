@@ -24,5 +24,4 @@ public class UserInterceptor implements HandlerInterceptor {
                 modelAndView.getModelMap().addAttribute("user", memberService.getByUsername(principal.getName()));
         }
     }
-
 }

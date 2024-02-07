@@ -119,3 +119,9 @@ body, ul, li {
     padding: 50px;
     border-radius: 10px;
 }
+
+.bigBox {
+    background: rgba(100, 100, 100, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+}

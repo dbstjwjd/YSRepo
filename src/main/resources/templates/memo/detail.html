@@ -1,18 +1,18 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container" style="color: white; font-family: pixel;">
     <div class="my-5 bigBox">
-        <div style="border-bottom: 1px solid white;" class="my-5 pb-1 row align-items-end">
-            <div class="fs-3 fw-bold col-lg-7 col-md-6 col-sm-12" th:text="|< ${data.title} >|"></div>
+        <div style="border-bottom: 1px solid white;" class="pb-1 my-3 row align-items-end">
+            <div class="fs-3 fw-bold col-lg-7 col-md-6 col-sm-12" th:text="|< ${memo.title} >|"></div>
             <div class="col-lg-5 col-md-6 col-sm-12 text-end">
-                <div th:if="${data.modifyDate == null}" style="font-size: 14pt;"
-                     th:text="${#temporals.format(data.createDate, 'yyyy-MM-dd HH:mm')}"></div>
-                <div th:if="${data.modifyDate != null}" style="font-size: 14pt;"
-                     th:text="|${#temporals.format(data.modifyDate, 'yyyy-MM-dd HH:mm')} 수정|"></div>
+                <div th:if="${memo.modifyDate == null}" style="font-size: 14pt;"
+                     th:text="${#temporals.format(memo.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                <div th:if="${memo.modifyDate != null}" style="font-size: 14pt;"
+                     th:text="|${#temporals.format(memo.modifyDate, 'yyyy-MM-dd HH:mm')} 수정|"></div>
             </div>
         </div>
         <div style="border: 1px solid white; background: rgba(150, 150, 150, 0.5); border-radius: 5px;" class="p-3">
-            <div th:text="${data.content}" style="font-family: Pre; font-size: 13pt;"></div>
-            <div class="d-flex justify-content-end" th:if="${user.username == data.member.username}">
+            <div th:utext="${@commonUtil.markdown(memo.content)}" style="font-family: Pre; font-size: 13pt;"></div>
+            <div class="d-flex justify-content-end" th:if="${user.username == memo.member.username}">
                 <div class="choice me-1" id="modify" type="button" data-bs-toggle="modal" data-bs-target="#modifyModal">
                     <span class="arrow">▶</span>수정
                 </div>
@@ -21,27 +21,14 @@
                 </div>
             </div>
         </div>
-        <div class="mt-4" th:if="${data.filePath != null}">
-            <div style="border-bottom: 1px dashed white; line-height: 1.7; font-size: 14pt;"
-                 th:text="|첨부파일 (${#lists.size(data.filePath)})|" class="mb-3"></div>
-            <div th:each="file : ${data.filePath}" class="mt-2">
-                <div style="border: 0.5px solid darkgray; border-radius: 10px; padding:3px 15px 3px 15px; background: rgba(120, 120, 120, 0.5);">
-                    <a th:href="@{|/library/download/${data.id}/${file}|}" style="text-decoration: none;"
-                       class="link d-flex justify-content-between">
-                        <div th:text="${file}" style="font-family: Pre;"></div>
-                        <i class="bi bi-file-earmark-arrow-down"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
         <!-- delete modal -->
         <div class="modal" id="deleteModal" tabindex="-1" aria-hidden="true" style="font-family: pixel, serif;">
             <div class="modal-dialog modal-dialog-centered modal-sm">
                 <div class="modal-content" style="background: rgba(90, 90, 90, 0.9)">
                     <div class="modal-body">
-                        <div style="font-size: 14pt; text-align: center; color: white;">데이터를 삭제할까요?</div>
+                        <div style="font-size: 14pt; text-align: center; color: white;">메모를 삭제할까요?</div>
                         <div style="font-size: 14pt;" class="d-flex justify-content-center mt-2 text-light">
-                            <div class="me-5 choice" id="yesDelete" th:data-uri="@{|/library/delete/${data.id}|}"><span
+                            <div class="me-5 choice" id="yesDelete" th:data-uri="@{|/memo/delete/${memo.id}|}"><span
                                     class="arrow">▶</span>YES
                             </div>
                             <div class="choice" id="noDelete" data-bs-dismiss="modal"><span class="arrow">▶</span>NO
@@ -56,9 +43,9 @@
             <div class="modal-dialog modal-dialog-centered modal-sm">
                 <div class="modal-content" style="background: rgba(90, 90, 90, 0.9)">
                     <div class="modal-body">
-                        <div style="font-size: 14pt; text-align: center; color: white;">데이터를 수정할까요?</div>
+                        <div style="font-size: 14pt; text-align: center; color: white;">메모를 수정할까요?</div>
                         <div style="font-size: 14pt;" class="d-flex justify-content-center mt-2 text-light">
-                            <div class="me-5 choice" id="yesModify" th:data-uri="@{|/library/modify/${data.id}|}"><span
+                            <div class="me-5 choice" id="yesModify" th:data-uri="@{|/memo/modify/${memo.id}|}"><span
                                     class="arrow">▶</span>YES
                             </div>
                             <div class="choice" id="noModify" data-bs-dismiss="modal"><span class="arrow">▶</span>NO

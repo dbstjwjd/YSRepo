@@ -1,5 +1,28 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content">
-
+<div layout:fragment="content" class="container" style="font-family: pixel, serif">
+    <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
+        <h2 style="color: white;">메모장<span class="blinking">|</span></h2>
+        <div class="d-flex justify-content-end">
+            <a type="button" href="/memo/write" class="btn-sm yellowBtn" style="color: white;">메모 등록</a>
+        </div>
+    </div>
+    <table class="table table-hover text-light text-center" style="background: rgba(100, 100, 100, 0.5);">
+        <thead>
+        <tr style="background: rgb(40, 40, 40); font-size: 15pt;">
+            <th>no.</th>
+            <th style="width: 50%;">title</th>
+            <th>written by</th>
+            <th>date Created</th>
+        </tr>
+        </thead>
+        <tbody style="font-size: 13pt;">
+        <tr th:each="memo, loop:${list}">
+            <td th:text="${#numbers.formatInteger(#lists.size(list) - loop.index, 3)}"></td>
+            <td class="text-start"><a th:href="@{|/memo/detail/${memo.id}|}" th:text="${memo.title}" class="link"></a></td>
+            <td th:text="${memo.member.nickname}"></td>
+            <td th:text="${#temporals.format(memo.createDate, 'YYYY-MM-dd')}"></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </html>

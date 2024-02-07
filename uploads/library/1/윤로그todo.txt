@@ -1,4 +1,0 @@
-비밀번호 찾기/변경
-명예의 전당?
-
-Uncaught SyntaxError : missing ) after argument list bbb:146 (at bbb:146:13) -> 괄호 누락

@@ -1,20 +1,30 @@
-<nav th:fragment="navbarFragment" class="p-4 mt-0 w-full top-0" style=" background:#000; border-bottom: 1px double #fff;">
-    <div class="container-fluid flex items-center">
-        <div class="flex w-full">
-            <a style="font-family: pixel, sans-serif; font-size: 2rem; font-weight: bold; line-height: 1;"
-               class="text-base no-underline text-white hover:text-gray-300" href="/main">
-                YS Repository
-            </a>
-        </div>
-        <div class="flex justify-end w-full items-center">
-            <a style="font-family: pixel, serif; font-size: 14pt;"
-               class="inline-block no-underline mr-5 link" href="/">Home</a>
-            <a style="font-family: pixel, serif; font-size: 14pt;"
-               class="inline-block no-underline mr-5 link" href="/member/login" sec:authorize="isAnonymous()">Log-in</a>
-            <a style="font-family: pixel, serif; font-size: 14pt;"
-               class="inline-block no-underline mr-5 link" href="/member/logout" sec:authorize="isAuthenticated()">Log-out</a>
-            <a style="font-family: pixel, serif; font-size: 14pt;"
-               class="inline-block no-underline link" href="/member/signup">Sign-up</a>
+<nav th:fragment="navbarFragment" class="navbar navbar-expand-lg" style="background: black; border-bottom: 3px double #fff; font-family: pixel, serif">
+    <div class="container-fluid">
+        <a class="navbar-brand link fs-2" href="/main">YS Repository</a>
+        <button class="navbar-toggler yellowBtn" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                style="background: goldenrod; border: 2px solid #fff;">MENU
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="font-size: 14pt;">
+                <li class="nav-item">
+                    <a class="nav-link link" href="/">HOME</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link" href="/member/login" sec:authorize="isAnonymous()">LOG-IN</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link" href="/member/logout" sec:authorize="isAuthenticated()">LOG-OUT</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link" href="/member/signup">SIGN-UP</a>
+                </li>
+                <li class="nav-item ms-auto">
+                    <div sec:authorize="isAuthenticated()" class="nav-link" th:text="|WELCOME ${user.nickname}😊!|"
+                         style="color: white; border: 1px solid gray; border-radius: 10px; padding: 5px; background: rgba(100, 100, 100, 0.5);"></div>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>

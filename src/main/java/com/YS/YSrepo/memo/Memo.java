@@ -23,6 +23,8 @@ public class Memo {
 
     private LocalDateTime createDate;
 
+    private LocalDateTime modifyDate;
+
     @ManyToOne
     private Member member;
 

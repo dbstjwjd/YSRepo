@@ -6,14 +6,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.naming.InterruptedNamingException;
 import java.io.IOException;
@@ -44,11 +43,13 @@ public class LibraryController {
     }
 
     @GetMapping("/write")
+    @PreAuthorize("isAuthenticated()")
     public String create() {
         return "library/write";
     }
 
     @PostMapping("/write")
+    @PreAuthorize("isAuthenticated()")
     public String create(String title, String content, MultipartFile[] files, Principal principal) throws IOException {
         Member member = memberService.getByUsername(principal.getName());
         Library library = libraryService.createData(title, content, member);
@@ -88,24 +89,35 @@ public class LibraryController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Integer id) {
+    @PreAuthorize("isAuthenticated()")
+    public String delete(@PathVariable("id") Integer id, Principal principal) {
         Library library = libraryService.getData(id);
+        if (!principal.getName().equals(library.getMember().getUsername()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
         libraryService.deleteData(library);
         return "redirect:/library/list";
     }
 
     @GetMapping("/modify/{id}")
-    public String modify(@PathVariable("id") Integer id, Model model) {
+    @PreAuthorize("isAuthenticated()")
+    public String modify(@PathVariable("id") Integer id, Model model, Principal principal) {
         Library library = libraryService.getData(id);
+        if (!principal.getName().equals(library.getMember().getUsername()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
         model.addAttribute("data", library);
         return "library/write";
     }
 
     @PostMapping("/modify/{id}")
-    public String modify(@PathVariable("id") Integer id, String title, String content, MultipartFile[] files) throws IOException {
+    @PreAuthorize("isAuthenticated()")
+    public String modify(@PathVariable("id") Integer id, String title, String content, MultipartFile[] files, Principal principal) throws IOException {
         Library library = libraryService.getData(id);
+        if (!principal.getName().equals(library.getMember().getUsername()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
         libraryService.modifyData(library, title, content);
-        libraryService.uploadFiles(library, files);
+        if (!files[0].getOriginalFilename().isEmpty()) {
+            libraryService.uploadFiles(library, files);
+        }
         return "redirect:/library/detail/" + id;
     }
 
