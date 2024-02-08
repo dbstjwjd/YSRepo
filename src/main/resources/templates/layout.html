@@ -22,7 +22,7 @@
 <nav th:replace="~{navbar :: navbarFragment}"></nav>
 <th:block layout:fragment="content"></th:block>
 <!-- alert Toast -->
-<div class="toast-container position-fixed top-10 start-50 translate-middle-x">
+<div class="toast-container position-fixed top-10 start-50 translate-middle-x" style="z-index: 99;">
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="alertToast">
         <div class="toast-body" style="background: rgba(50, 50, 50, 0.8)">
             <div id="message" style="color: white; font-family: pixel;"></div>

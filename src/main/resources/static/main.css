@@ -125,3 +125,7 @@ body, ul, li {
     padding: 20px;
     border-radius: 10px;
 }
+
+.modal-backdrop {
+    display: none;
+}

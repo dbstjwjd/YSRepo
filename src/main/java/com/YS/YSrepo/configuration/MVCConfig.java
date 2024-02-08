@@ -12,5 +12,4 @@ public class MVCConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/library/file/**")
                 .addResourceLocations("file:" + librayPath + "/");
     }
-
 }

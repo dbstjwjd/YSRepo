@@ -18,7 +18,7 @@
         <tbody style="font-size: 13pt;">
         <tr th:each="memo, loop:${list}">
             <td th:text="${#numbers.formatInteger(#lists.size(list) - loop.index, 3)}"></td>
-            <td class="text-start"><a th:href="@{|/memo/detail/${memo.id}|}" th:text="${memo.title}" class="link"></a></td>
+            <td class="text-start" style="font-family: Pre, serif;"><a th:href="@{|/memo/detail/${memo.id}|}" th:text="${memo.title}" class="link"></a></td>
             <td th:text="${memo.member.nickname}"></td>
             <td th:text="${#temporals.format(memo.createDate, 'YYYY-MM-dd')}"></td>
         </tr>
